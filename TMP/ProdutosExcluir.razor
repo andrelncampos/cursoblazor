@@ -1,0 +1,50 @@
+@page "/ProdutosExcluir"
+@using EcommStart.Shared.Models
+@using System.Text.Json
+@inject HttpClient httpClient
+
+<h3 class="text-center">Lista de produtos</h3>
+
+<div class="shadow p-3">
+
+    <label class="">
+        Id do produto:
+        <InputNumber class="form-control" @bind-Value="produtoId"></InputNumber>
+    </label>
+
+    <div class="mt-2">
+        <button class="btn btn-primary" @onclick="Excluir">Excluir</button>
+    </div>
+
+
+    <div class="text-center p-3 text-danger">
+        @msg
+    </div>
+
+
+</div>
+
+@code {
+
+    private int produtoId;
+    private string msg = "";
+
+    private async Task Excluir()
+    {
+
+        string api = $"api/produtos/excluir/{produtoId}";
+
+        HttpResponseMessage response = await httpClient.DeleteAsync(api);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            msg = await response.Content.ReadAsStringAsync();
+        }
+        else
+        {
+            msg = "Produto excluído.";
+        }
+    }
+}
+
+
