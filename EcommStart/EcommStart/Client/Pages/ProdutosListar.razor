@@ -29,7 +29,7 @@
                 <td class="border p-1">@p.Preco.ToString("c")</td>
                 <td class="border p-1">@p.Quantidade</td>
                 <td class="border p-1">
-                    <img src="@p.Imagem" alt="Imagem do produto">
+                    <img src="@p.Imagem" class="w-25" alt="Imagem do produto">
                 </td>
             </tr>
         }
@@ -64,10 +64,6 @@
         {
             string s = await response.Content.ReadAsStringAsync();
             produtos = await response.Content.ReadFromJsonAsync<List<Produto>>();
-            if (produtos == null)
-            {
-                msg = "Não há produtos cadastrados na base de dados";
-            }
         }
         else
         {
