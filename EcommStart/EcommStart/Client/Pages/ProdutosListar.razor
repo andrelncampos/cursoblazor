@@ -53,6 +53,7 @@
 
     protected async Task Carregar()
     {
+        produtos = new();
         string api = "api/produtos/listar";
         if (!string.IsNullOrEmpty(palavra))
         {
@@ -62,12 +63,11 @@
 
         if (response.IsSuccessStatusCode)
         {
-            string s = await response.Content.ReadAsStringAsync();
             produtos = await response.Content.ReadFromJsonAsync<List<Produto>>();
         }
         else
         {
-            msg = "Não foi possível fazer a rquisição para o servidor";
+            msg = await response.Content.ReadAsStringAsync();
         }
     }
 

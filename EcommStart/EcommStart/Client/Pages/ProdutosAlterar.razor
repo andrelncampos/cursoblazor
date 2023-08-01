@@ -1,47 +1,64 @@
-@page "/ProdutosAlterar"
+﻿@page "/ProdutosAlterar"
+
 @using EcommStart.Shared.Models
-@using System.Text.Json
 @inject HttpClient httpClient
 
-<h3 class="text-center">Lista de produtos</h3>
+<h3>Alterar produtos</h3>
 
 <div class="shadow p-3">
 
-    <label class="">
+    <label>
+
         Id do produto:
-        <InputNumber class="form-control" @bind-Value="produtoId"></InputNumber>
+        <InputNumber class="form-control"
+        @bind-Value="produtoId">
+        </InputNumber>
     </label>
 
     <div class="mt-2">
-        <button class="btn btn-primary" @onclick="Consultar">Consultar</button>
+        <button class="btn btn-primary"
+        @onclick="Consultar">
+            Consultar
+        </button>
     </div>
 
     <hr />
 
     <EditForm Model="produto" OnValidSubmit="Alterar" class="d-flex flex-column">
 
-        <label class="">
+        <label class="mt-2">
             Nome:
-            <InputText class="form-control" @bind-Value="produto.Nome"></InputText>
+            <InputText class="form-control"
+            @bind-Value="produto.Nome">
+            </InputText>
         </label>
 
         <label class="mt-2">
             Preço:
-            <InputNumber class="form-control" @bind-Value="produto.Preco"></InputNumber>
+            <InputNumber class="form-control"
+            @bind-Value="produto.Preco">
+            </InputNumber>
         </label>
 
         <label class="mt-2">
             Quantidade:
-            <InputNumber class="form-control" @bind-Value="produto.Quantidade"></InputNumber>
+            <InputNumber class="form-control"
+            @bind-Value="produto.Quantidade">
+            </InputNumber>
         </label>
 
         <label class="mt-2">
             Imagem:
-            <InputText class="form-control" @bind-Value="produto.Imagem"></InputText>
+            <InputText class="form-control"
+            @bind-Value="produto.Imagem">
+            </InputText>
         </label>
 
         <div class="mt-2">
-            <button class="btn btn-primary" type="submit">Alterar</button>
+            <button class="btn btn-primary"
+                    type="submit">
+                Alterar
+            </button>
         </div>
 
     </EditForm>
@@ -50,16 +67,15 @@
         @msg
     </div>
 
-
 </div>
 
 @code {
 
-    private int produtoId;
-    private Produto? produto = new();
-    private string msg = "";
+    int produtoId;
+    string msg = "";
+    Produto produto = new();
 
-    private async Task Consultar()
+    protected async Task Consultar()
     {
         string api = $"api/produtos/consultar/{produtoId}";
 
@@ -76,20 +92,27 @@
         }
     }
 
-    private async Task Alterar()
+    protected async Task Alterar()
     {
         if (produto == null)
         {
             msg = "Produto está nulo.";
-            return;
         }
+
         string api = "api/produtos/alterar";
 
-        HttpResponseMessage response = await httpClient.PutAsJsonAsync<Produto>(api, produto);
+        HttpResponseMessage response = await httpClient
+                                             .PutAsJsonAsync<Produto>(api, produto);
 
         if (!response.IsSuccessStatusCode)
         {
             msg = await response.Content.ReadAsStringAsync();
+            if (string.IsNullOrEmpty(msg))
+            {
+                msg = $"Não foi possível acessar a API {api}";
+            }
         }
+
     }
+
 }
